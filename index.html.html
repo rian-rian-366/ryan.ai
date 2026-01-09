@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryan.ai - Wujudkan Imajinasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#ec4899',
+                        dark: '#0f172a',
+                        darker: '#020617',
+                        surface: '#1e293b'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'gradient-x': 'gradient-x 15s ease infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'gradient-x': {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, rgba(2, 6, 23, 0) 50%);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; 
+        }
+
+        .loader {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #818cf8;
+            width: 24px;
+            height: 24px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans relative">
+
+    <!-- Background Orbs -->
+    <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] animate-pulse-slow"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 1.5s;"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center">
+                        <i class="fa-solid fa-wand-magic-sparkles text-white text-sm"></i>
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-tight text-white">Ryan.ai</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="text-white px-3 py-2 rounded-md text-sm font-medium border-b-2 border-indigo-500">Beranda</a>
+                        <a href="#gallery" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Galeri</a>
+                        <a href="#about" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Tentang</a>
+                    </div>
+                </div>
+                <div>
+                    <button class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium transition-all backdrop-blur-sm border border-white/10">
+                        Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col items-center">
+        
+        <!-- Hero Section -->
+        <div class="text-center mb-12 animate-float">
+            <div class="inline-flex items-center px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-medium mb-4">
+                <span class="flex w-2 h-2 bg-indigo-400 rounded-full mr-2 animate-pulse"></span>
+                Powered by Gemini Imagen 4.0
+            </div>
+            <h1 class="text-5xl md:text-7xl font-display font-bold mb-6 leading-tight">
+                Imajinasi Menjadi <br/>
+                <span class="gradient-text">Realita Visual</span>
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+                Tulis deskripsi apa saja, dan Ryan.ai akan mengubah kata-katamu menjadi karya seni digital yang menakjubkan dalam hitungan detik.
+            </p>
+        </div>
+
+        <!-- Generator Interface -->
+        <div class="w-full max-w-4xl glass-panel rounded-2xl p-1 shadow-2xl border border-white/10 relative z-10">
+            <div class="bg-darker/50 rounded-xl p-6 md:p-8">
+                
+                <!-- Input Area -->
+                <div class="flex flex-col gap-4">
+                    <label for="promptInput" class="text-sm font-medium text-gray-300 ml-1">Deskripsi Prompt</label>
+                    <div class="relative">
+                        <textarea 
+                            id="promptInput" 
+                            rows="3" 
+                            class="w-full bg-surface border border-gray-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all resize-none placeholder-gray-500"
+                            placeholder="Contoh: Seekor kucing cyberpunk memakai kacamata neon duduk di atas gedung pencakar langit Tokyo saat hujan malam hari..."
+                        ></textarea>
+                        <button 
+                            id="randomPromptBtn"
+                            class="absolute bottom-3 right-3 text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 bg-indigo-500/10 px-2 py-1 rounded-md transition-colors"
+                            onclick="fillRandomPrompt()"
+                        >
+                            <i class="fa-solid fa-dice"></i> Acak
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-4 justify-between items-center mt-2">
+                        <div class="flex gap-2">
+                             <!-- Style badges (Visual only for prototype) -->
+                            <span class="px-3 py-1 rounded-full bg-gray-800 text-xs text-gray-400 border border-gray-700 cursor-pointer hover:border-indigo-500 hover:text-indigo-400 transition-colors">Photorealistic</span>
+                            <span class="px-3 py-1 rounded-full bg-gray-800 text-xs text-gray-400 border border-gray-700 cursor-pointer hover:border-indigo-500 hover:text-indigo-400 transition-colors">Anime</span>
+                            <span class="px-3 py-1 rounded-full bg-gray-800 text-xs text-gray-400 border border-gray-700 cursor-pointer hover:border-indigo-500 hover:text-indigo-400 transition-colors">3D Render</span>
+                        </div>
+                        
+                        <button 
+                            onclick="generateImage()" 
+                            id="generateBtn"
+                            class="w-full md:w-auto bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-indigo-500/30 transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                        >
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Buat Gambar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Area -->
+                <div id="resultArea" class="mt-8 hidden">
+                    <div class="border-t border-gray-800 my-6"></div>
+                    
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <!-- Image Container -->
+                        <div class="w-full md:w-2/3 relative group">
+                            <div id="loadingSpinner" class="hidden absolute inset-0 bg-darker/80 z-20 flex flex-col items-center justify-center rounded-xl backdrop-blur-sm">
+                                <div class="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
+                                <p class="text-indigo-300 font-display animate-pulse">Sedang melukis...</p>
+                            </div>
+                            
+                            <div class="relative overflow-hidden rounded-xl border border-gray-700 bg-black/40 min-h-[300px] flex items-center justify-center">
+                                <img id="generatedImage" src="" alt="Generated Art" class="w-full h-auto object-cover rounded-xl hidden shadow-2xl">
+                                <div id="placeholderImage" class="text-center p-10">
+                                    <i class="fa-regular fa-image text-4xl text-gray-700 mb-3"></i>
+                                    <p class="text-gray-600 text-sm">Hasil gambar akan muncul di sini</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions & Details -->
+                        <div class="w-full md:w-1/3 flex flex-col gap-4">
+                            <h3 class="text-xl font-display font-bold text-white">Hasil Generasi</h3>
+                            <p class="text-gray-400 text-sm italic" id="usedPrompt">...</p>
+                            
+                            <div class="mt-auto flex flex-col gap-3">
+                                <button onclick="downloadImage()" id="downloadBtn" class="w-full bg-surface hover:bg-gray-700 border border-gray-600 text-white py-3 rounded-lg transition-colors flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled>
+                                    <i class="fa-solid fa-download"></i> Download HD
+                                </button>
+                                <button class="w-full bg-surface hover:bg-gray-700 border border-gray-600 text-white py-3 rounded-lg transition-colors flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled>
+                                    <i class="fa-solid fa-share-nodes"></i> Bagikan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="hidden mt-4 p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-200 text-sm flex items-start gap-3">
+                    <i class="fa-solid fa-circle-exclamation mt-1"></i>
+                    <div>
+                        <span class="font-bold">Gagal Membuat Gambar:</span>
+                        <span id="errorText">Terjadi kesalahan koneksi.</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Featured Gallery (Static Placeholder) -->
+        <div id="gallery" class="mt-24 w-full">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-display font-bold">Karya Komunitas</h2>
+                <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm">Lihat Semua <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Gallery Item 1 -->
+                <div class="group relative aspect-square overflow-hidden rounded-xl bg-gray-800">
+                    <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974&auto=format&fit=crop" alt="AI Art 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <p class="text-white text-xs truncate">Astronaut in a flower field</p>
+                    </div>
+                </div>
+                 <!-- Gallery Item 2 -->
+                 <div class="group relative aspect-square overflow-hidden rounded-xl bg-gray-800">
+                    <img src="https://images.unsplash.com/photo-1635322966219-b75ed372eb01?q=80&w=2064&auto=format&fit=crop" alt="AI Art 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <p class="text-white text-xs truncate">Abstract neon waves</p>
+                    </div>
+                </div>
+                 <!-- Gallery Item 3 -->
+                 <div class="group relative aspect-square overflow-hidden rounded-xl bg-gray-800">
+                    <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop" alt="AI Art 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <p class="text-white text-xs truncate">Cyberpunk city street</p>
+                    </div>
+                </div>
+                 <!-- Gallery Item 4 -->
+                 <div class="group relative aspect-square overflow-hidden rounded-xl bg-gray-800">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop" alt="AI Art 4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <p class="text-white text-xs truncate">Oil painting of mountains</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-white/5 bg-darker py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <i class="fa-solid fa-wand-magic-sparkles text-indigo-500"></i>
+                <span class="font-display font-bold text-xl text-white">Ryan.ai</span>
+            </div>
+            <p class="text-gray-500 text-sm">© 2024 Ryan.ai Project. Dibuat dengan teknologi Gemini.</p>
+        </div>
+    </footer>
+
+    <script>
+        // System Requirement: API Key is provided by environment
+        const apiKey = ""; 
+
+        const promptInput = document.getElementById('promptInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const resultArea = document.getElementById('resultArea');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const generatedImage = document.getElementById('generatedImage');
+        const placeholderImage = document.getElementById('placeholderImage');
+        const usedPrompt = document.getElementById('usedPrompt');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        const randomPrompts = [
+            "Seekor rubah cyberpunk mengenakan jaket neon di tengah hujan kota futuristik",
+            "Pemandangan kastil kristal yang melayang di atas awan saat matahari terbenam",
+            "Potret robot antik yang sedang melukis bunga di taman bergaya impresionis",
+            "Naga mekanik yang terbuat dari roda gigi emas dan perak",
+            "Kabin kayu yang nyaman di dalam bola salju kaca raksasa di hutan musim dingin"
+        ];
+
+        function fillRandomPrompt() {
+            const random = randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
+            promptInput.value = random;
+        }
+
+        async function generateImage() {
+            const prompt = promptInput.value.trim();
+            
+            if (!prompt) {
+                showError("Mohon masukkan deskripsi gambar terlebih dahulu.");
+                return;
+            }
+
+            // Reset UI State
+            errorMessage.classList.add('hidden');
+            resultArea.classList.remove('hidden');
+            loadingSpinner.classList.remove('hidden');
+            loadingSpinner.classList.add('flex');
+            placeholderImage.classList.add('hidden');
+            generatedImage.classList.add('hidden');
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<div class="loader mr-2"></div> Memproses...';
+            downloadBtn.disabled = true;
+            downloadBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            // Scroll to result
+            resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            try {
+                // Determine API URL based on environment (using proxy or direct if key exists)
+                // Note: In this environment, we use the standard endpoint structure provided in instructions
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        instances: [
+                            { prompt: prompt }
+                        ],
+                        parameters: {
+                            sampleCount: 1
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'Gagal terhubung ke server AI');
+                }
+
+                const data = await response.json();
+
+                // Parsing Image data (Imagen usually returns bytesBase64Encoded)
+                if (data.predictions && data.predictions[0] && data.predictions[0].bytesBase64Encoded) {
+                    const base64Image = data.predictions[0].bytesBase64Encoded;
+                    const mimeType = data.predictions[0].mimeType || "image/png";
+                    const imageUrl = `data:${mimeType};base64,${base64Image}`;
+
+                    // Update UI with Image
+                    generatedImage.src = imageUrl;
+                    generatedImage.onload = () => {
+                        loadingSpinner.classList.add('hidden');
+                        loadingSpinner.classList.remove('flex');
+                        generatedImage.classList.remove('hidden');
+                        usedPrompt.textContent = `"${prompt}"`;
+                        
+                        // Enable buttons
+                        downloadBtn.disabled = false;
+                        downloadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    };
+
+                } else {
+                    throw new Error("Format respon API tidak dikenali.");
+                }
+
+            } catch (error) {
+                console.error(error);
+                loadingSpinner.classList.add('hidden');
+                loadingSpinner.classList.remove('flex');
+                placeholderImage.classList.remove('hidden');
+                showError(error.message);
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Buat Gambar Lagi</span>';
+            }
+        }
+
+        function showError(msg) {
+            errorMessage.classList.remove('hidden');
+            errorText.textContent = msg;
+        }
+
+        function downloadImage() {
+            if (generatedImage.src) {
+                const link = document.createElement('a');
+                link.href = generatedImage.src;
+                link.download = `ryan-ai-${Date.now()}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    </script>
+</body>
+</html>
